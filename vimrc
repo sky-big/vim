@@ -90,7 +90,7 @@ if g:islinux
             syntax on
         endif
 
-        set mouse=a                    " 在任何模式下启用鼠标
+        " set mouse=a                    " 在任何模式下启用鼠标
         set t_Co=256                   " 在终端启用256色
         set backspace=2                " 设置退格键可用
 
@@ -172,7 +172,13 @@ Bundle 'L9'
 Bundle 'matrix.vim'
 " Bundle 'javacomplete'
 " Bundle 'vim-javacompleteex'               "更好的 Java 补全插件
+
+" go pulgins
 Bundle 'fatih/vim-go'
+" go 中的代码追踪，输入 gd 就可以自动跳转
+Bundle 'dgryski/vim-godef'
+" 代码自动完成，安装完插件还需要额外配置才可以使用
+Bundle 'Valloric/YouCompleteMe'
 
 " non github repos   (非上面两种情况的，按下面格式填写)  
 " Bundle 'git://git.wincent.com/command-t.git'
@@ -743,6 +749,40 @@ let g:ctrlp_mruf_max=500
 " 当启动时，CtrlP依据这个变量来设置它的工作目录
 let g:ctrlp_working_path_mode = 'ra'
 
+" -----------------------------------------------------------------------------
+"  < vim-go 插件配置 >
+" -----------------------------------------------------------------------------
+let g:go_fmt_command = "goimports" " 格式化将默认的 gofmt 替换
+let g:go_autodetect_gopath = 1
+let g:go_list_type = "quickfix"
+
+let g:go_version_warning = 1
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_generate_tags = 1
+
+let g:godef_split=2
+"
+
+" -----------------------------------------------------------------------------
+"  < YouCompleteMe 插件配置 >
+" -----------------------------------------------------------------------------
+" make YCM compatible with UltiSnips (using supertab)
+let g:ycm_key_list_select_completion = ['<C-n>', '<space>']
+let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+let g:SuperTabDefaultCompletionType = '<C-n>'
+
+" better key bindings for UltiSnipsExpandTrigger
+let g:UltiSnipsExpandTrigger = "<tab>"
+let g:UltiSnipsJumpForwardTrigger = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+
+
 " =============================================================================
 "                          << 以下为常用工具配置 >>
 " =============================================================================
@@ -849,44 +889,6 @@ let g:erlangHighlightBif = 1
 
 " 自动切换目录为当前编辑文件所在目录
 au BufRead,BufNewFile,BufEnter * cd %:p:h
-
-" =============================================================================
-"                     << windows 下解决 Quickfix 乱码问题 >>
-" =============================================================================
-" windows 默认编码为 cp936，而 Gvim(Vim) 内部编码为 utf-8，所以常常输出为乱码
-" 以下代码可以将编码为 cp936 的输出信息转换为 utf-8 编码，以解决输出乱码问题
-" 但好像只对输出信息全部为中文才有满意的效果，如果输出信息是中英混合的，那可能
-" 不成功，会造成其中一种语言乱码，输出信息全部为英文的好像不会乱码
-" 如果输出信息为乱码的可以试一下下面的代码，如果不行就还是给它注释掉
-
-" if g:iswindows
-"     function QfMakeConv()
-"         let qflist = getqflist()
-"         for i in qflist
-"            let i.text = iconv(i.text, "cp936", "utf-8")
-"         endfor
-"         call setqflist(qflist)
-"      endfunction
-"      au QuickfixCmdPost make call QfMakeConv()
-" endif
-
-" 搜索路径的设置
-" if (g:iswindows && g:isGUI)
-    " g:fSearchPath = 'D:\vim\vim74\'
-" else
-    " g:fSearchPath = '/home/xxw/'
-" endif
-" echom 'D:\vim\vim74\'
-
-"  搜索文件类型的设置
-"  if (&filetype == "cpp" || &filetype == "c")
-"     g:searchFileType = "\*\*\/\*\.[ch] \*\*\/\*\.cpp"
-"     echom g:searchFileType
-" elseif &filetype == "erlang"
-"    g:searchFileType = "\*\*\/\*.erl"
-" else
-"     g:searchFileType = "\*"
-" endif
 
 " 全局搜索当前光标下的字符串
 " <Bar> 相当于 |
