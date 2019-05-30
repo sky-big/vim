@@ -44,8 +44,8 @@ let s:purple                =           "AE81FF"        " 紫色(主要是数字
 let s:green                 =           "00FF00"        " 深绿
 let s:red                   =           "FF0000"        " 深红
 let s:specialred            =           "F92672"        " 语言保留字(浅红色)
-let s:specialgreen          =           "A6E22E"        " 函数名字的颜色(浅绿色)
-let s:gray                  =           "545454"
+let s:specialgreen          =           "A6E22E"        " 字符串(浅绿色)
+let s:gray                  =           "545454"        " 注释
 
 " Console 256 Colours
 if !has("gui_running")
@@ -323,10 +323,10 @@ if has("gui_running") || &t_Co == 88 || &t_Co == 256
 	call <SID>X("Repeat", s:specialred, "", "")
 	call <SID>X("Structure", s:cyan, "", "")
     " 函数名的颜色高亮配置
-	call <SID>X("Function", s:yellow, "", "")
+	call <SID>X("Function", s:specialgreen, "", "")
     " 变量的颜色高亮配置(例如数字.引号内字符串.布尔值)
 	call <SID>X("Constant", s:purple, "", "")
-	call <SID>X("String", s:specialgreen, "", "")
+	call <SID>X("String", s:light_green, "", "")
     " 特殊符号的颜色高亮配置(通常是类似字符串中的"\n")
 	call <SID>X("Special", s:foreground, "", "")
     " 预处理的颜色高亮配置(例如c语言中的#include)
