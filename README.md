@@ -1,1 +1,1 @@
-# vim
+# vim bash git config
