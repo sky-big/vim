@@ -44,7 +44,7 @@ let s:purple                =           "AE81FF"        " 紫色(主要是数字
 let s:green                 =           "00FF00"        " 深绿
 let s:red                   =           "FF0000"        " 深红
 let s:specialred            =           "F92672"        " 语言保留字(浅红色)
-let s:specialgreen          =           "A6E22E"        " 字符串(浅绿色)
+let s:specialgreen          =           "A6E22E"        " 函数名
 let s:gray                  =           "545454"        " 注释
 
 " Console 256 Colours
@@ -323,10 +323,10 @@ if has("gui_running") || &t_Co == 88 || &t_Co == 256
 	call <SID>X("Repeat", s:specialred, "", "")
 	call <SID>X("Structure", s:cyan, "", "")
     " 函数名的颜色高亮配置
-	call <SID>X("Function", s:specialgreen, "", "")
+	call <SID>X("Function", s:purple, "", "")
     " 变量的颜色高亮配置(例如数字.引号内字符串.布尔值)
 	call <SID>X("Constant", s:purple, "", "")
-	call <SID>X("String", s:light_green, "", "")
+	call <SID>X("String", s:specialgreen, "", "")
     " 特殊符号的颜色高亮配置(通常是类似字符串中的"\n")
 	call <SID>X("Special", s:foreground, "", "")
     " 预处理的颜色高亮配置(例如c语言中的#include)
@@ -398,23 +398,23 @@ endif
 "======================================================== 
 " Highlight All Class Name
 "======================================================== 
-" syn match cppClass "\<[a-zA-Z_][a-zA-Z_0-9]*\>::"me=e-2
-" hi cppClass guifg=#00FF00 cterm=bold ctermfg=yellow
-" call <SID>X("cppClass", s:specialgreen, "", "")
+syn match cppClass "\<[a-zA-Z_][a-zA-Z_0-9]*\>::"me=e-2
+hi cppClass guifg=#00FF00 cterm=bold ctermfg=yellow
+call <SID>X("cppClass", s:specialgreen, "", "")
 
-" syn match NormalFunctions "\<[a-zA-Z_][a-zA-Z_0-9]*\>[^()]*)("me=e-2
-" syn match NormalFunctions "\<[a-zA-Z_][a-zA-Z_0-9]*\>\s*("me=e-1
-" highlight! NormalFunctions guifg=#FF0000 cterm=bold ctermfg=yellow
-" call <SID>X("NormalFunctions", s:specialred, "", "")
+syn match NormalFunctions "\<[a-zA-Z_][a-zA-Z_0-9]*\>[^()]*)("me=e-2
+syn match NormalFunctions "\<[a-zA-Z_][a-zA-Z_0-9]*\>\s*("me=e-1
+highlight! NormalFunctions guifg=#FF0000 cterm=bold ctermfg=yellow
+call <SID>X("NormalFunctions", s:specialred, "", "")
 
 " 高亮特殊的关键字
-" syntax keyword SpecialKey return new when
-" call <SID>X("SpecialKey", s:purple, "", "")
+syntax keyword SpecialKey return new when
+call <SID>X("SpecialKey", s:blue, "", "")
 
 " 高亮true和false
-" syntax keyword BoolKey true false
-" highlight BoolKey guifg=#F92672 cterm=bold ctermfg=yellow
-" call <SID>X("BoolKey", s:specialred, "", "")
+syntax keyword BoolKey true false
+highlight BoolKey guifg=#F92672 cterm=bold ctermfg=yellow
+call <SID>X("BoolKey", s:specialred, "", "")
 
 " Delete Functions
 delf <SID>X
