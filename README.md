@@ -14,12 +14,15 @@ git clone http://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
 
 # bash
 
-## 将bash目录下的bashrc拷贝到用户目录下改名为.bashrc
+## 安装
+将bash目录下的bashrc拷贝到用户目录下改名为.bashrc
 
 # git
 
-## 将git目录下的gitconfig拷贝到用户根目录下改名为.gitconfig
+## 安装配置
+将git目录下的gitconfig拷贝到用户根目录下改名为.gitconfig
 
-## 将git目录下的gitconfig-local拷贝到用户根目录下改名为.gitconfig-local
+将git目录下的gitconfig-local拷贝到用户根目录下改名为.gitconfig-local
 
-## 将git目录下的git-prompt.sh拷贝到用户根目录下
+## 私有定制配置
+将git目录下的git-prompt.sh拷贝到用户根目录下
