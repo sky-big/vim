@@ -7,10 +7,10 @@
 git clone http://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
 
 ## 安装所有插件
-在vim中执行：!BundleInstall
+在vim中执行：BundleInstall
 
 ## 安装vim-go需要的命令
-在vim中执行：!GoInstallBinaries
+在vim中执行：GoInstallBinaries
 
 # bash
 
