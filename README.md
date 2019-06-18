@@ -7,10 +7,13 @@
 git clone http://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
 
 ## 安装所有插件
-在vim中执行：BundleInstall
+在vim中执行：PluginInstall
 
 ## 安装vim-go需要的命令
 在vim中执行：GoInstallBinaries
+
+## YouCompleteMe支持go
+python3 install.py --go-completer
 
 # bash
 
