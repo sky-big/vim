@@ -1,106 +1,30 @@
-" =============================================================================
-"        << 判断操作系统是 Windows 还是 Linux 和判断是终端还是 Gvim >>
-" =============================================================================
+set hlsearch        "高亮搜索
+set incsearch       "在输入要搜索的文字时，实时匹配
 
-" -----------------------------------------------------------------------------
-"  < 判断操作系统是否是 Windows 还是 Linux >
-" -----------------------------------------------------------------------------
-let g:iswindows = 0
-let g:islinux = 0
-
-if(has("win32") || has("win64") || has("win95") || has("win16"))
-    let g:iswindows = 1
-else
-    let g:islinux = 1
+" Uncomment the following to have Vim jump to the last position when
+" reopening a file
+if has("autocmd")
+    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
 
-" -----------------------------------------------------------------------------
-"  < 判断是终端还是 Gvim >
-" -----------------------------------------------------------------------------
-if has("gui_running")
-    let g:isGUI = 1
-else
-    let g:isGUI = 0
+" This line should not be removed as it ensures that various options are
+" properly set to work with the Vim-related packages available in Debian.
+runtime! debian.vim
+
+" Vim5 and later versions support syntax highlighting. Uncommenting the next
+" line enables syntax highlighting by default.
+if has("syntax")
+    syntax on
 endif
 
-" =============================================================================
-"                          << 以下为软件默认配置 >>
-" =============================================================================
+" set mouse=a                    " 在任何模式下启用鼠标
+set t_Co=256                   " 在终端启用256色
+set backspace=2                " 设置退格键可用
 
-" -----------------------------------------------------------------------------
-"  < Windows Gvim 默认配置> 做了一点修改
-" -----------------------------------------------------------------------------
-if (g:iswindows && g:isGUI)
-    source $VIMRUNTIME/vimrc_example.vim
-    source $VIMRUNTIME/mswin.vim
-    behave mswin
-    set diffexpr=MyDiff()
-
-    function! s:MyDiff()
-        let opt = '-a --binary '
-        if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
-        if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
-        let arg1 = v:fname_in
-        if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
-        let arg2 = v:fname_new
-        if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
-        let arg3 = v:fname_out
-        if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
-        let eq = ''
-        if $VIMRUNTIME =~ ' '
-            if &sh =~ '\<cmd'
-                let cmd = '""' . $VIMRUNTIME . '\diff"'
-                let eq = '"'
-            else
-                let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
-            endif
-        else
-            let cmd = $VIMRUNTIME . '\diff'
-        endif
-        silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
-    endfunction
+" Source a global configuration file if available
+if filereadable("/etc/vim/vimrc.local")
+    source /etc/vim/vimrc.local
 endif
-
-" -----------------------------------------------------------------------------
-"  < Linux Gvim/Vim 默认配置> 做了一点修改
-" -----------------------------------------------------------------------------
-if g:islinux
-    set hlsearch        "高亮搜索
-    set incsearch       "在输入要搜索的文字时，实时匹配
-
-    " Uncomment the following to have Vim jump to the last position when
-    " reopening a file
-    if has("autocmd")
-        au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-    endif
-
-    if g:isGUI
-        " Source a global configuration file if available
-        if filereadable("/etc/vim/gvimrc.local")
-            source /etc/vim/gvimrc.local
-        endif
-    else
-        " This line should not be removed as it ensures that various options are
-        " properly set to work with the Vim-related packages available in Debian.
-        runtime! debian.vim
-
-        " Vim5 and later versions support syntax highlighting. Uncommenting the next
-        " line enables syntax highlighting by default.
-        if has("syntax")
-            syntax on
-        endif
-
-        " set mouse=a                    " 在任何模式下启用鼠标
-        set t_Co=256                   " 在终端启用256色
-        set backspace=2                " 设置退格键可用
-
-        " Source a global configuration file if available
-        if filereadable("/etc/vim/vimrc.local")
-            source /etc/vim/vimrc.local
-        endif
-    endif
-endif
-
 
 " =============================================================================
 "                          << 以下为用户自定义配置 >>
@@ -112,76 +36,60 @@ endif
 " 用于更方便的管理vim插件，具体用法参考 :h vundle 帮助
 " 安装方法为在终端输入如下命令
 " git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
-" 如果想在 windows 安装就必需先安装 "git for window"，可查阅网上资料
-" BundleList             -列举列表(也就是.vimrc)中配置的所有插件  
-" BundleInstall          -安装列表中的全部插件  
-" BundleInstall!         -更新列表中的全部插件  
-" BundleSearch foo       -查找foo插件  
-" BundleSearch! foo      -刷新foo插件缓存  
-" BundleClean            -清除列表中没有的插件  
-" BundleClean!           -清除列表中没有的插件  
+" PluginList             -列举列表(也就是.vimrc)中配置的所有插件  
+" PluginInstall          -安装列表中的全部插件  
+" PluginInstall!         -更新列表中的全部插件  
+" PluginSearch foo       -查找foo插件  
+" PluginSearch! foo      -刷新foo插件缓存  
+" PluginClean            -清除列表中没有的插件  
+" PluginClean!           -清除列表中没有的插件  
 
 set nocompatible                                      "禁用 Vi 兼容模式
 filetype off
 
-if g:islinux
-    set rtp+=~/.vim/bundle/vundle/
-    call vundle#rc()
-else
-    set rtp+=$VIM/vimfiles/bundle/vundle/
-    call vundle#rc('$VIM/vimfiles/bundle/')
-endif
+set rtp+=~/.vim/bundle/vundle/
+call vundle#begin()
 
 " 使用Vundle来管理Vundle，这个必须要有。
-Bundle 'gmarik/vundle'
+Plugin 'gmarik/vundle'
 
 " 以下为要安装或更新的插件，不同仓库都有（具体书写规范请参考帮助）
 " （Github网站上非vim-scripts仓库的插件，按下面格式填写）
-Bundle 'jiangmiao/auto-pairs'
-Bundle 'Yggdroot/indentLine'
-Bundle 'Shougo/neocomplcache.vim'
-Bundle 'scrooloose/nerdcommenter'
-Bundle 'scrooloose/nerdtree'
-Bundle 'msanders/snipmate.vim'
-Bundle 'wesleyche/SrcExpl'
-Bundle 'tpope/vim-surround'
-Bundle 'scrooloose/syntastic'
-Bundle 'majutsushi/tagbar'
-Bundle 'kien/ctrlp.vim'
-Bundle 'Lokaltog/vim-powerline'
-Bundle 'jimenezrick/vimerl'
-" Bundle 'fholgado/minibufexpl.vim'         "好像与 Vundle 插件有一些冲突
-" Bundle 'ervandew/supertab'                "有时与 snipmate 插件冲突
-" Bundle 'dgryski/vim-godef'                  "实现代码中的跳转，从函数调用的地方，直接跳转到函数的定义，默认命令是：gd
-" Bundle 'Blackrush/vim-gocode'               "Golang的代码补全
+Plugin 'jiangmiao/auto-pairs'
+Plugin 'Yggdroot/indentLine'
+Plugin 'Shougo/neocomplete.vim'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'scrooloose/nerdtree'
+Plugin 'msanders/snipmate.vim'
+Plugin 'wesleyche/SrcExpl'
+Plugin 'tpope/vim-surround'
+Plugin 'scrooloose/syntastic'
+Plugin 'majutsushi/tagbar'
+Plugin 'kien/ctrlp.vim'
+Plugin 'Lokaltog/vim-powerline'
+Plugin 'jimenezrick/vimerl'
+" go pulgins
+Plugin 'fatih/vim-go'
+" for vim script
+" Plugin 'exvim/test-loading'
 
 "（vim-scripts仓库里的，按下面格式填写）
-Bundle 'a.vim'
-Bundle 'Align'
-Bundle 'bufexplorer.zip'
-Bundle 'ccvext.vim'
-Bundle 'cSyntaxAfter'
-Bundle 'Mark--Karkat'
-Bundle 'OmniCppComplete'
-Bundle 'repeat.vim'
-Bundle 'std_c.zip'
-Bundle 'taglist.vim'
-Bundle 'TxtBrowser'
-Bundle 'ZoomWin'
-Bundle 'L9'
-Bundle 'matrix.vim'
-" Bundle 'javacomplete'
-" Bundle 'vim-javacompleteex'               "更好的 Java 补全插件
+Plugin 'a.vim'
+Plugin 'Align'
+Plugin 'bufexplorer.zip'
+Plugin 'ccvext.vim'
+Plugin 'cSyntaxAfter'
+Plugin 'Mark--Karkat'
+Plugin 'OmniCppComplete'
+Plugin 'repeat.vim'
+Plugin 'std_c.zip'
+Plugin 'taglist.vim'
+Plugin 'TxtBrowser'
+Plugin 'ZoomWin'
+Plugin 'L9'
+Plugin 'matrix.vim'
 
-" go pulgins
-Bundle 'fatih/vim-go'
-" go 中的代码追踪，输入 gd 就可以自动跳转
-Bundle 'dgryski/vim-godef'
-" 代码自动完成，安装完插件还需要额外配置才可以使用
-Bundle 'Valloric/YouCompleteMe'
-
-" non github repos   (非上面两种情况的，按下面格式填写)  
-" Bundle 'git://git.wincent.com/command-t.git'
+call vundle#end()
 
 filetype plugin indent on
 
@@ -196,17 +104,6 @@ set fileencodings=ucs-bom,utf-8,gbk,cp936,latin-1     "设置支持打开的文�
 " 文件格式，默认 ffs=dos,unix
 set fileformat=unix                                   "设置新文件的<EOL>格式
 set fileformats=unix,dos,mac                          "给出文件的<EOL>格式类型
-
-if (g:iswindows && g:isGUI)
-    "解决菜单乱码
-    source $VIMRUNTIME/delmenu.vim
-    source $VIMRUNTIME/menu.vim
-
-    "解决consle输出乱码
-    language messages zh_CN.utf-8
-    "Gvim设置字体
-    set guifont=Yahei\ Mono\ Monaco
-endif
 
 " -----------------------------------------------------------------------------
 "  < 编写文件时的配置 >
@@ -266,226 +163,11 @@ set cursorline                                        "突出显示当前行
 set wrap                                              "设置自动换行
 set shortmess=atI                                     "去掉欢迎界面
 
-" 设置 gVim 窗口初始位置及大小
-if g:isGUI
-    au GUIEnter * simalt ~x                           "窗口启动时自动最大化
-    " winpos 100 10                                     "指定窗口出现的位置，坐标原点在屏幕左上角
-    " set lines=38 columns=120                          "指定窗口大小，lines为高度，columns为宽度
-endif
-
 syntax enable                                         "打开语法高亮功能,只为没有设置过高亮的组定义颜色
 syntax on                                             "启动vim默认语法高亮
 " syntax off                                            "关闭vim开启默认高亮
 
-" 设置代码配色方案
-if g:isGUI
-    colorscheme myvimcolor                              "Gvim配色方案
-    " colorscheme desert
-    " colorscheme MyVimColors
-else
-    colorscheme myvimcolor                              "终端配色方案
-endif
-
-
-" 显示/隐藏菜单栏、工具栏、滚动条，可用 Ctrl + F11 切换
-if g:isGUI
-    set guioptions-=m
-    set guioptions-=T
-    set guioptions-=r
-    set guioptions-=L
-    map <silent> <c-F11> :if &guioptions =~# 'm' <Bar>
-        \set guioptions-=m <Bar>
-        \set guioptions-=T <Bar>
-        \set guioptions-=r <Bar>
-        \set guioptions-=L <Bar>
-    \else <Bar>
-        \set guioptions+=m <Bar>
-        \set guioptions+=T <Bar>
-        \set guioptions+=r <Bar>
-        \set guioptions+=L <Bar>
-    \endif<CR>
-endif
-
-" -----------------------------------------------------------------------------
-"  < 单文件编译、连接、运行配置 >
-" -----------------------------------------------------------------------------
-" 以下只做了 C、C++ 的单文件配置，其它语言可以参考以下配置增加
-
-" F9 一键保存、编译、连接存并运行
-nnoremap <F9> :call Run()<CR>
-inoremap <F9> <ESC>:call Run()<CR>
-
-" Ctrl + F9 一键保存并编译
-nnoremap <c-F9> :call Compile()<CR>
-inoremap <c-F9> <ESC>:call Compile()<CR>
-
-" Ctrl + F10 一键保存并连接
-nnoremap <c-F10> :call Link()<CR>
-inoremap <c-F10> <ESC>:call Link()<CR>
-
-let s:LastShellReturn_C = 0
-let s:LastShellReturn_L = 0
-let s:ShowWarning = 1
-let s:Obj_Extension = '.o'
-let s:Exe_Extension = '.exe'
-let s:Sou_Error = 0
-
-let s:windows_CFlags = 'gcc\ -fexec-charset=gbk\ -Wall\ -g\ -O0\ -c\ %\ -o\ %<.o'
-let s:linux_CFlags = 'gcc\ -Wall\ -g\ -O0\ -c\ %\ -o\ %<.o'
-
-let s:windows_CPPFlags = 'g++\ -fexec-charset=gbk\ -Wall\ -g\ -O0\ -c\ %\ -o\ %<.o'
-let s:linux_CPPFlags = 'g++\ -Wall\ -g\ -O0\ -c\ %\ -o\ %<.o'
-
-func! Compile()
-    exe ":ccl"
-    exe ":update"
-    let s:Sou_Error = 0
-    let s:LastShellReturn_C = 0
-    let Sou = expand("%:p")
-    let v:statusmsg = ''
-    if expand("%:e") == "c" || expand("%:e") == "cpp" || expand("%:e") == "cxx"
-        let Obj = expand("%:p:r").s:Obj_Extension
-        let Obj_Name = expand("%:p:t:r").s:Obj_Extension
-        if !filereadable(Obj) || (filereadable(Obj) && (getftime(Obj) < getftime(Sou)))
-            redraw!
-            if expand("%:e") == "c"
-                if g:iswindows
-                    exe ":setlocal makeprg=".s:windows_CFlags
-                else
-                    exe ":setlocal makeprg=".s:linux_CFlags
-                endif
-                echohl WarningMsg | echo " compiling..."
-                silent make
-            elseif expand("%:e") == "cpp" || expand("%:e") == "cxx"
-                if g:iswindows
-                    exe ":setlocal makeprg=".s:windows_CPPFlags
-                else
-                    exe ":setlocal makeprg=".s:linux_CPPFlags
-                endif
-                echohl WarningMsg | echo " compiling..."
-                silent make
-            endif
-            redraw!
-            if v:shell_error != 0
-                let s:LastShellReturn_C = v:shell_error
-            endif
-            if g:iswindows
-                if s:LastShellReturn_C != 0
-                    exe ":bo cope"
-                    echohl WarningMsg | echo " compilation failed"
-                else
-                    if s:ShowWarning
-                        exe ":bo cw"
-                    endif
-                    echohl WarningMsg | echo " compilation successful"
-                endif
-            else
-                if empty(v:statusmsg)
-                    echohl WarningMsg | echo " compilation successful"
-                else
-                    exe ":bo cope"
-                endif
-            endif
-        else
-            echohl WarningMsg | echo ""Obj_Name"is up to date"
-        endif
-    else
-        let s:Sou_Error = 1
-        echohl WarningMsg | echo " please choose the correct source file"
-    endif
-    exe ":setlocal makeprg=make"
-endfunc
-
-func! Link()
-    call Compile()
-    if s:Sou_Error || s:LastShellReturn_C != 0
-        return
-    endif
-    if expand("%:e") == "c" || expand("%:e") == "cpp" || expand("%:e") == "cxx"
-        let s:LastShellReturn_L = 0
-        let Sou = expand("%:p")
-        let Obj = expand("%:p:r").s:Obj_Extension
-        if g:iswindows
-            let Exe = expand("%:p:r").s:Exe_Extension
-            let Exe_Name = expand("%:p:t:r").s:Exe_Extension
-        else
-            let Exe = expand("%:p:r")
-            let Exe_Name = expand("%:p:t:r")
-        endif
-        let v:statusmsg = ''
-        if filereadable(Obj) && (getftime(Obj) >= getftime(Sou))
-            redraw!
-            if !executable(Exe) || (executable(Exe) && getftime(Exe) < getftime(Obj))
-                if expand("%:e") == "c"
-                    setlocal makeprg=gcc\ -o\ %<\ %<.o
-                    echohl WarningMsg | echo " linking..."
-                    silent make
-                elseif expand("%:e") == "cpp" || expand("%:e") == "cxx"
-                    setlocal makeprg=g++\ -o\ %<\ %<.o
-                    echohl WarningMsg | echo " linking..."
-                    silent make
-                endif
-                redraw!
-                if v:shell_error != 0
-                    let s:LastShellReturn_L = v:shell_error
-                endif
-                if g:iswindows
-                    if s:LastShellReturn_L != 0
-                        exe ":bo cope"
-                        echohl WarningMsg | echo " linking failed"
-                    else
-                        if s:ShowWarning
-                            exe ":bo cw"
-                        endif
-                        echohl WarningMsg | echo " linking successful"
-                    endif
-                else
-                    if empty(v:statusmsg)
-                        echohl WarningMsg | echo " linking successful"
-                    else
-                        exe ":bo cope"
-                    endif
-                endif
-            else
-                echohl WarningMsg | echo ""Exe_Name"is up to date"
-            endif
-        endif
-        setlocal makeprg=make
-    endif
-endfunc
-
-func! Run()
-    let s:ShowWarning = 0
-    call Link()
-    let s:ShowWarning = 1
-    if s:Sou_Error || s:LastShellReturn_C != 0 || s:LastShellReturn_L != 0
-        return
-    endif
-    let Sou = expand("%:p")
-    if expand("%:e") == "c" || expand("%:e") == "cpp" || expand("%:e") == "cxx"
-        let Obj = expand("%:p:r").s:Obj_Extension
-        if g:iswindows
-            let Exe = expand("%:p:r").s:Exe_Extension
-        else
-            let Exe = expand("%:p:r")
-        endif
-        if executable(Exe) && getftime(Exe) >= getftime(Obj) && getftime(Obj) >= getftime(Sou)
-            redraw!
-            echohl WarningMsg | echo " running..."
-            if g:iswindows
-                exe ":!%<.exe"
-            else
-                if g:isGUI
-                    exe ":!gnome-terminal -x bash -c './%<; echo; echo 请按 Enter 键继续; read'"
-                else
-                    exe ":!clear; ./%<"
-                endif
-            endif
-            redraw!
-            echohl WarningMsg | echo " running finish"
-        endif
-    endif
-endfunc
+colorscheme myvimcolor                              "终端配色方案
 
 " -----------------------------------------------------------------------------
 "  < 其它配置 >
@@ -494,7 +176,6 @@ set writebackup                             "保存文件前建立备份，保�
 set nobackup                                "设置无备份文件
 " set noswapfile                              "设置无临时文件
 " set vb t_vb=                                "关闭提示音
-
 
 " =============================================================================
 "                          << 以下为常用插件配置 >>
@@ -550,12 +231,6 @@ au! BufRead,BufNewFile,BufEnter *.{c,cpp,h,java,javascript} call CSyntaxAfter()
 " 在终端上会有屏幕刷新的问题，这个问题能解决有更好了
 " 开启/关闭对齐线
 nmap <leader>il :IndentLinesToggle<CR>
-
-" 设置Gvim的对齐线样式
-if g:isGUI
-    let g:indentLine_char = "┊"
-    let g:indentLine_first_char = "┊"
-endif
 
 " 设置终端对齐线颜色，如果不喜欢可以将其注释掉采用默认颜色
 let g:indentLine_color_term = 239
@@ -767,21 +442,6 @@ let g:go_highlight_methods = 1
 let g:go_highlight_generate_tags = 1
 
 let g:godef_split=2
-"
-
-" -----------------------------------------------------------------------------
-"  < YouCompleteMe 插件配置 >
-" -----------------------------------------------------------------------------
-" make YCM compatible with UltiSnips (using supertab)
-let g:ycm_key_list_select_completion = ['<C-n>', '<space>']
-let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
-let g:SuperTabDefaultCompletionType = '<C-n>'
-
-" better key bindings for UltiSnipsExpandTrigger
-let g:UltiSnipsExpandTrigger = "<tab>"
-let g:UltiSnipsJumpForwardTrigger = "<tab>"
-let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
-
 
 " =============================================================================
 "                          << 以下为常用工具配置 >>
@@ -824,64 +484,86 @@ endif
 set tags=./tags;                            "向上级目录递归查找tags文件（好像只有在Windows下才有用）
 
 " -----------------------------------------------------------------------------
-"  < gvimfullscreen 工具配置 > 请确保已安装了工具
-" -----------------------------------------------------------------------------
-" 用于 Windows Gvim 全屏窗口，可用 F11 切换
-" 全屏后再隐藏菜单栏、工具栏、滚动条效果更好
-if (g:iswindows && g:isGUI)
-    nnoremap <F11> <Esc>:call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR>
-endif
-
-" -----------------------------------------------------------------------------
-"  < vimtweak 工具配置 > 请确保以已装了工具
-" -----------------------------------------------------------------------------
-" 这里只用于窗口透明与置顶
-" 常规模式下 Ctrl + Up（上方向键） 增加不透明度，Ctrl + Down（下方向键） 减少不透明度，<Leader>t 窗口置顶与否切换
-if (g:iswindows && g:isGUI)
-    let g:Current_Alpha = 255
-    let g:Top_Most = 0
-    func! Alpha_add()
-        let g:Current_Alpha = g:Current_Alpha + 10
-        if g:Current_Alpha > 255
-            let g:Current_Alpha = 255
-        endif
-        call libcallnr("vimtweak.dll","SetAlpha",g:Current_Alpha)
-    endfunc
-    func! Alpha_sub()
-        let g:Current_Alpha = g:Current_Alpha - 10
-        if g:Current_Alpha < 155
-            let g:Current_Alpha = 155
-        endif
-        call libcallnr("vimtweak.dll","SetAlpha",g:Current_Alpha)
-    endfunc
-    func! Top_window()
-        if  g:Top_Most == 0
-            call libcallnr("vimtweak.dll","EnableTopMost",1)
-            let g:Top_Most = 1
-        else
-            call libcallnr("vimtweak.dll","EnableTopMost",0)
-            let g:Top_Most = 0
-        endif
-    endfunc
-
-    "快捷键设置
-    nnoremap <c-up> :call Alpha_add()<CR>
-    nnoremap <c-down> :call Alpha_sub()<CR>
-    nnoremap <leader>t :call Top_window()<CR>
-endif
-
-" -----------------------------------------------------------------------------
 "  < vimerl 工具配置 > 用于编写Erlang代码的插件
 " -----------------------------------------------------------------------------
 " ErlangApplication 生成一个行为模式为OTP应用程序行的框架。
 " ErlangSupervisor 生成一个行为模式为OTP监督树的框架。
 " ErlangGen[Server|Fsm|Event] 生成gen_server，fsm，event框架。
-if g:islinux
-    let g:erlangManPath="/usr/local/lib/erlang/man" 
-else
-    let g:erlangManPath="/usr/local/lib/erlang/man" 
-endif
+let g:erlangManPath="/usr/local/lib/erlang/man" 
 let g:erlangHighlightBif = 1
+
+" -----------------------------------------------------------------------------
+"  < neocomplete配置 >
+" -----------------------------------------------------------------------------
+" Disable AutoComplPop.
+let g:acp_enableAtStartup = 0
+" Use neocomplete.
+let g:neocomplete#enable_at_startup = 1
+" Use smartcase.
+let g:neocomplete#enable_smart_case = 1
+" Set minimum syntax keyword length.
+let g:neocomplete#sources#syntax#min_keyword_length = 3
+
+" Define dictionary.
+let g:neocomplete#sources#dictionary#dictionaries = {
+    \ 'default' : '',
+    \ 'vimshell' : $HOME.'/.vimshell_hist',
+    \ 'scheme' : $HOME.'/.gosh_completions'
+        \ }
+
+" Define keyword.
+if !exists('g:neocomplete#keyword_patterns')
+    let g:neocomplete#keyword_patterns = {}
+endif
+let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+
+" Plugin key-mappings.
+inoremap <expr><C-g>     neocomplete#undo_completion()
+inoremap <expr><C-l>     neocomplete#complete_common_string()
+
+" Recommended key-mappings.
+" <CR>: close popup and save indent.
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+  return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+  " For no inserting <CR> key.
+  "return pumvisible() ? "\<C-y>" : "\<CR>"
+endfunction
+" <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" <C-h>, <BS>: close popup and delete backword char.
+inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+" Close popup by <Space>.
+"inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
+
+" AutoComplPop like behavior.
+"let g:neocomplete#enable_auto_select = 1
+
+" Shell like behavior(not recommended).
+"set completeopt+=longest
+"let g:neocomplete#enable_auto_select = 1
+"let g:neocomplete#disable_auto_complete = 1
+"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
+
+" Enable omni completion.
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+" Enable heavy omni completion.
+if !exists('g:neocomplete#sources#omni#input_patterns')
+  let g:neocomplete#sources#omni#input_patterns = {}
+endif
+"let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+"let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+"let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+
+" For perlomni.vim setting.
+" https://github.com/c9s/perlomni.vim
+let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 
 " =============================================================================
 "                          << 以下为常用自动命令配置 >>
