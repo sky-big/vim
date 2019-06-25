@@ -407,6 +407,8 @@ let g:go_highlight_extra_types = 1
 let g:go_highlight_methods = 1
 let g:go_highlight_generate_tags = 1
 let g:godef_split=2
+" 设置使用不用的插件进行不全
+let g:go_def_mode = 'godef'
 
 " =============================================================================
 "                          << 以下为常用工具配置 >>
@@ -632,3 +634,7 @@ nnoremap <Up> <Nop>
 nnoremap <Down> <Nop>
 nnoremap <Left> <Nop>
 nnoremap <Right> <Nop>
+
+" go跳转命令重定向
+nnoremap <silent> gl :GoDef<cr>
+nnoremap <silent> gh :<C-U>call go#def#StackPop(v:count1)<cr>
