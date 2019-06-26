@@ -68,8 +68,8 @@ Plugin 'majutsushi/tagbar'
 Plugin 'kien/ctrlp.vim'
 Plugin 'Lokaltog/vim-powerline'
 Plugin 'jimenezrick/vimerl'
-" go pulgins
-Plugin 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plugin 'fatih/vim-go', { 'do': ':GoUpdateBinaries' } " go language plugin
+Plugin 'ianva/vim-youdao-translater'
 
 "（vim-scripts仓库里的，按下面格式填写）
 Plugin 'a.vim'
@@ -410,6 +410,17 @@ let g:godef_split=2
 " 设置使用不用的插件进行不全
 let g:go_def_mode = 'godef'
 
+" go跳转命令重定向
+nnoremap <silent> gl :GoDef<cr>
+nnoremap <silent> gh :<C-U>call go#def#StackPop(v:count1)<cr>
+
+" -----------------------------------------------------------------------------
+"  < vim-youdao-translater 插件配置 >
+" -----------------------------------------------------------------------------
+vnoremap <silent> tt :<C-u>Ydv<CR>
+nnoremap <silent> tt :<C-u>Ydc<CR>
+noremap <leader>yd :<C-u>Yde<CR>
+
 " =============================================================================
 "                          << 以下为常用工具配置 >>
 " =============================================================================
@@ -634,7 +645,3 @@ nnoremap <Up> <Nop>
 nnoremap <Down> <Nop>
 nnoremap <Left> <Nop>
 nnoremap <Right> <Nop>
-
-" go跳转命令重定向
-nnoremap <silent> gl :GoDef<cr>
-nnoremap <silent> gh :<C-U>call go#def#StackPop(v:count1)<cr>
