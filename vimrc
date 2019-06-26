@@ -58,6 +58,7 @@ Plugin 'gmarik/vundle'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'Yggdroot/indentLine'
 Plugin 'Shougo/neocomplete.vim'
+Plugin 'Shougo/deol.nvim'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/nerdtree'
 Plugin 'msanders/snipmate.vim'
@@ -542,6 +543,11 @@ endif
 " For perlomni.vim setting.
 " https://github.com/c9s/perlomni.vim
 let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+
+" -----------------------------------------------------------------------------
+"  < deol配置 >
+" -----------------------------------------------------------------------------
+nnoremap <silent> sh :Deol<cr>
 
 " =============================================================================
 "                          << 以下为常用自动命令配置 >>
