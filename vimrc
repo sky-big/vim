@@ -376,7 +376,7 @@ au BufRead,BufNewFile *.txt setlocal ft=txt
 "  < CtrlP 插件配置 >
 " -----------------------------------------------------------------------------
 "设置开始文件搜索的快捷键
-let g:ctrlp_map = '<C-t>'
+let g:ctrlp_map = '<leader>f'
 let g:ctrl_cmd = 'CtrlP'
 " 使用该选项来设置自定义的根目录标记作为对默认标记
 let g:ctrlp_root_markers = ['.settings','otp_versions.table']
