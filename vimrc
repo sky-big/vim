@@ -71,6 +71,7 @@ Plugin 'Lokaltog/vim-powerline'
 Plugin 'jimenezrick/vimerl'
 Plugin 'fatih/vim-go', { 'do': ':GoUpdateBinaries' } " go language plugin
 Plugin 'ianva/vim-youdao-translater'
+Plugin 'tpope/vim-fugitive'         " git
 
 "（vim-scripts仓库里的，按下面格式填写）
 Plugin 'a.vim'
