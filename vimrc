@@ -409,7 +409,7 @@ let g:go_highlight_extra_types = 1
 let g:go_highlight_methods = 1
 let g:go_highlight_generate_tags = 1
 let g:godef_split=2
-" 设置使用不用的插件进行不全
+" 设置使用不用的插件进行跳转
 let g:go_def_mode = 'godef'
 
 " go跳转命令重定向
