@@ -404,7 +404,7 @@
 	excludesfile = ~/.gitignore_global
 	autocrlf = input
 [user]
-	email = 491321720@qq.com
+	email = sky_big@yeah.net
 	name = sky-big
 [credential]
 	helper = store

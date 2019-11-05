@@ -25,4 +25,4 @@ git clone http://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
 将git目录下的gitconfig-local拷贝到用户根目录下改名为.gitconfig-local
 
 ## 私有定制配置
-将git目录下的git-prompt.sh拷贝到用户根目录下
+将git目录下的git-prompt.sh拷贝到用户根目录下改名为.git-prompt.sh
