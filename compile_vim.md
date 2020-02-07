@@ -22,14 +22,14 @@ cd "${SRCDIR:-src}" && exec ./configure \
                             --enable-perlinterp=dynamic \
                             --enable-rubyinterp=dynamic \
                             --with-ruby-command=/usr/bin/ruby \
-                            --enable-python3interp \
-                            --with-python3-config-dir=/usr/lib/python3.6/config-3.6m-x86_64-linux-gnu \
+                            --enable-pythoninterp=yes \
+                            --with-python-config-dir=/usr/lib/python2.7/config \
                             --enable-luainterp \
-                            --with-luajit \
+                            --with-lua-prefix=/usr/local \
+                            --with-luajit=yes \
                             --enable-cscope \
                             --enable-gui=auto \
                             --with-features=huge \
-                            --with-x \
                             --enable-fontset \
                             --enable-largefile \
                             --disable-netbeans \
